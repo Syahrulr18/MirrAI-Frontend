@@ -1,0 +1,18 @@
+{
+  "streak": {
+    "title": "Practice Streak",
+    "days": "days",
+    "longest": "Longest streak"
+  },
+  "badges": {
+    "title": "Achievements",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
+    "eyeContactMaster": "Eye Contact Master",
+    "eyeContactMasterDesc": "Achieve over 90% eye contact in a session",
+    "smoothSpeaker": "Smooth Speaker",
+    "smoothSpeakerDesc": "Complete a 5-minute session with zero filler words",
+    "postureChampion": "Posture Champion",
+    "postureChampionDesc": "Maintain good posture for 3 consecutive sessions"
+  }
+}

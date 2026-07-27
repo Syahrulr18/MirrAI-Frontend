@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "dashboard": "Dasbor",
+    "practice": "Latihan",
+    "progress": "Progres",
+    "learning": "Modul Belajar",
+    "templates": "Template Naskah",
+    "profile": "Profil"
+  },
+  "buttons": {
+    "start": "Mulai",
+    "stop": "Berhenti",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "submit": "Kirim",
+    "continue": "Lanjutkan",
+    "back": "Kembali",
+    "close": "Tutup",
+    "login": "Masuk",
+    "register": "Daftar",
+    "logout": "Keluar",
+    "startPractice": "Mulai Latihan",
+    "viewResults": "Lihat Hasil",
+    "tryAgain": "Coba Lagi"
+  },
+  "errors": {
+    "generic": "Terjadi kesalahan. Silakan coba lagi.",
+    "networkError": "Tidak dapat terhubung. Periksa koneksi internet Anda.",
+    "unauthorized": "Silakan masuk untuk melanjutkan.",
+    "notFound": "Halaman tidak ditemukan.",
+    "cameraPermission": "Akses kamera diperlukan untuk sesi latihan. Silakan izinkan akses kamera di pengaturan browser.",
+    "micPermission": "Akses mikrofon diperlukan untuk analisis suara. Silakan izinkan akses mikrofon.",
+    "speechNotSupported": "Pengenalan suara tidak didukung di browser ini. Coba gunakan Chrome atau Edge untuk pengalaman terbaik.",
+    "aiUnavailable": "Coach sedang sibuk, coba lagi sebentar ya."
+  },
+  "empty": {
+    "noSessions": "Belum ada sesi latihan. Yuk mulai yang pertama!",
+    "noBadges": "Belum ada badge yang didapat. Terus berlatih!",
+    "noHistory": "Belum ada riwayat chat. Tanyakan apa saja ke AI Coach!"
+  },
+  "theme": {
+    "light": "Terang",
+    "dark": "Gelap"
+  },
+  "language": {
+    "en": "English",
+    "id": "Bahasa Indonesia"
+  }
+}

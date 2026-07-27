@@ -1,0 +1,16 @@
+{
+  "title": "AI Coach",
+  "placeholder": "Ask your coach anything...",
+  "send": "Send",
+  "newConversation": "New Conversation",
+  "suggestedPrompts": {
+    "eyeContact": "Why is my eye contact score low?",
+    "fillers": "How do I reduce filler words?",
+    "tips": "Tips for my next presentation",
+    "scripts": "Recommend a practice script"
+  },
+  "errors": {
+    "busy": "Coach is busy right now, try again in a moment.",
+    "failed": "Failed to send message. Please try again."
+  }
+}

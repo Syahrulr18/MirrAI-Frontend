@@ -1,0 +1,39 @@
+{
+  "modes": {
+    "thesisDefense": "Sidang Skripsi",
+    "jobInterview": "Wawancara Kerja & Elevator Pitch",
+    "publicSpeech": "Pidato Umum"
+  },
+  "setup": {
+    "title": "Pengaturan Latihan",
+    "selectMode": "Pilih Mode Latihan",
+    "selectScript": "Pilih Naskah (Opsional)",
+    "freestyle": "Mode Bebas",
+    "setDuration": "Target Durasi (menit)",
+    "startSession": "Mulai Sesi"
+  },
+  "room": {
+    "loading": "Menyiapkan AI Coach...",
+    "loadingSteps": {
+      "camera": "Kamera terhubung",
+      "faceModel": "Model wajah dimuat",
+      "poseModel": "Model pose dimuat",
+      "ready": "Siap!"
+    },
+    "wpm": "KPM",
+    "fillers": "Kata Pengisi",
+    "timer": "Waktu",
+    "eyeContact": "Kontak Mata",
+    "posture": "Postur",
+    "tooFast": "Terlalu cepat",
+    "tooSlow": "Terlalu lambat",
+    "ideal": "Kecepatan ideal",
+    "lookUp": "Coba tatap kamera ya",
+    "straightenUp": "Coba tegakkan bahu ya",
+    "stopFidgeting": "Coba tetap tenang ya",
+    "handsActive": "Coba gunakan gestur tangan",
+    "stopSession": "Akhiri Sesi",
+    "teleprompter": "Teleprompter",
+    "scrollSpeed": "Kecepatan Gulir"
+  }
+}

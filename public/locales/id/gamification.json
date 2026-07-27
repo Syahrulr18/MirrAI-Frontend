@@ -1,0 +1,18 @@
+{
+  "streak": {
+    "title": "Streak Latihan",
+    "days": "hari",
+    "longest": "Streak terpanjang"
+  },
+  "badges": {
+    "title": "Pencapaian",
+    "locked": "Terkunci",
+    "unlocked": "Terbuka",
+    "eyeContactMaster": "Master Kontak Mata",
+    "eyeContactMasterDesc": "Capai kontak mata di atas 90% dalam satu sesi",
+    "smoothSpeaker": "Pembicara Lancar",
+    "smoothSpeakerDesc": "Selesaikan sesi 5 menit tanpa kata pengisi",
+    "postureChampion": "Juara Postur",
+    "postureChampionDesc": "Pertahankan postur baik selama 3 sesi berturut-turut"
+  }
+}

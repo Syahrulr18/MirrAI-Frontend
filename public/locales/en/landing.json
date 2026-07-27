@@ -1,0 +1,29 @@
+{
+  "hero": {
+    "title": "Your AI-Powered Public Speaking Coach",
+    "subtitle": "The Smart Mirror for Public Speaking.",
+    "cta": "Start Free Practice",
+    "secondaryCta": "Learn More"
+  },
+  "features": {
+    "eyeContact": {
+      "title": "Eye Contact Tracker",
+      "description": "Real-time detection of your gaze direction. Get instant feedback when you look away from the camera too long."
+    },
+    "posture": {
+      "title": "Posture Guard",
+      "description": "AI monitors your body language — slouching, fidgeting, and passive hands. Get gentle reminders to stand confident."
+    },
+    "filler": {
+      "title": "Filler Word Counter",
+      "description": "Catches every \"um\", \"uh\", and \"you know\" in real-time. Track your progress as filler words decrease over time."
+    },
+    "wpm": {
+      "title": "Voice Speedometer",
+      "description": "Monitors your words per minute with a rolling average. Stay in the ideal 100-160 WPM range for clear delivery."
+    }
+  },
+  "social": {
+    "trusted": "Trusted by speakers worldwide"
+  }
+}

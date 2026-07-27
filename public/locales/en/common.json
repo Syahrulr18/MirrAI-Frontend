@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "practice": "Practice",
+    "progress": "Progress",
+    "learning": "Learning",
+    "templates": "Templates",
+    "profile": "Profile"
+  },
+  "buttons": {
+    "start": "Start",
+    "stop": "Stop",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "continue": "Continue",
+    "back": "Back",
+    "close": "Close",
+    "login": "Log In",
+    "register": "Sign Up",
+    "logout": "Log Out",
+    "startPractice": "Start Practice",
+    "viewResults": "View Results",
+    "tryAgain": "Try Again"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "networkError": "Unable to connect. Check your internet connection.",
+    "unauthorized": "Please log in to continue.",
+    "notFound": "Page not found.",
+    "cameraPermission": "Camera access is required for practice sessions. Please allow camera access in your browser settings.",
+    "micPermission": "Microphone access is required for speech analysis. Please allow microphone access.",
+    "speechNotSupported": "Speech recognition is not supported in this browser. Try using Chrome or Edge for the best experience.",
+    "aiUnavailable": "Coach is busy right now, try again in a moment."
+  },
+  "empty": {
+    "noSessions": "No practice sessions yet. Start your first one!",
+    "noBadges": "No badges earned yet. Keep practicing!",
+    "noHistory": "No chat history yet. Ask your AI Coach anything!"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "language": {
+    "en": "English",
+    "id": "Bahasa Indonesia"
+  }
+}

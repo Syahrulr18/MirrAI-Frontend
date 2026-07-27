@@ -1,0 +1,16 @@
+{
+  "title": "AI Coach",
+  "placeholder": "Tanyakan apa saja ke coach...",
+  "send": "Kirim",
+  "newConversation": "Percakapan Baru",
+  "suggestedPrompts": {
+    "eyeContact": "Kenapa skor kontak mata saya rendah?",
+    "fillers": "Gimana cara ngurangin kata pengisi?",
+    "tips": "Tips untuk presentasi berikutnya",
+    "scripts": "Rekomendasiin naskah latihan"
+  },
+  "errors": {
+    "busy": "Coach sedang sibuk, coba lagi sebentar ya.",
+    "failed": "Gagal mengirim pesan. Silakan coba lagi."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "modes": {
+    "thesisDefense": "Thesis Defense",
+    "jobInterview": "Job Interview & Elevator Pitch",
+    "publicSpeech": "Public Speech"
+  },
+  "setup": {
+    "title": "Practice Setup",
+    "selectMode": "Select Practice Mode",
+    "selectScript": "Choose a Script (Optional)",
+    "freestyle": "Freestyle Mode",
+    "setDuration": "Target Duration (minutes)",
+    "startSession": "Start Session"
+  },
+  "room": {
+    "loading": "Preparing AI Coach...",
+    "loadingSteps": {
+      "camera": "Camera connected",
+      "faceModel": "Face model loaded",
+      "poseModel": "Pose model loaded",
+      "ready": "Ready!"
+    },
+    "wpm": "WPM",
+    "fillers": "Fillers",
+    "timer": "Time",
+    "eyeContact": "Eye Contact",
+    "posture": "Posture",
+    "tooFast": "Too fast",
+    "tooSlow": "Too slow",
+    "ideal": "Ideal pace",
+    "lookUp": "Try to look at the camera",
+    "straightenUp": "Try to straighten your shoulders",
+    "stopFidgeting": "Try to stay still",
+    "handsActive": "Try using hand gestures",
+    "stopSession": "End Session",
+    "teleprompter": "Teleprompter",
+    "scrollSpeed": "Scroll Speed"
+  }
+}

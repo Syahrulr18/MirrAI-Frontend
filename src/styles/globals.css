@@ -1,0 +1,122 @@
+/* ─── JetBrains Mono (from Google Fonts) ──────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base Resets ─────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply font-sans text-neutral bg-surface antialiased;
+    line-height: 1.6;
+    min-height: 100dvh;
+  }
+
+  /* Dark mode body */
+  .dark body {
+    @apply bg-surface-dark text-white;
+  }
+
+  /* Max line width for readability */
+  p, li {
+    max-width: 72ch;
+  }
+
+  /* No emoji enforcement — hide any stray emoji via font fallback */
+  :root {
+    --neu-border: #1A1A1A;
+    --shadow-color: #1A1A1A;
+    --neu-shadow: 4px 4px 0 var(--shadow-color);
+    --neu-shadow-hover: 6px 6px 0 var(--shadow-color);
+    --neu-shadow-active: 0px 0px 0 var(--shadow-color);
+    --neu-radius: 8px;
+    --neu-border-width: 3px;
+  }
+
+  .dark {
+    --shadow-color: #808080;
+  }
+
+  /* Make all neutral borders gray in dark mode */
+  .dark .border-neutral {
+    border-color: #808080 !important;
+  }
+}
+
+/* ─── Component Utilities ─────────────────────────────────── */
+@layer components {
+  /* Neubrutalist card base */
+  .card-neu {
+    @apply border-3 border-neutral rounded-neu shadow-neu bg-white;
+  }
+  .dark .card-neu {
+    @apply bg-card-dark;
+  }
+
+  /* Skeleton shimmer blocky */
+  .skeleton-neu {
+    @apply border-2 border-neutral rounded-neu;
+    background: linear-gradient(
+      90deg,
+      theme('colors.surface.DEFAULT') 0%,
+      #E0E0E0 50%,
+      theme('colors.surface.DEFAULT') 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer-blocky 1.2s infinite linear;
+  }
+  .dark .skeleton-neu {
+    background: linear-gradient(
+      90deg,
+      theme('colors.card.dark') 0%,
+      #2A2A2A 50%,
+      theme('colors.card.dark') 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  /* Label/Caption style */
+  .label-caps {
+    @apply text-xs font-semibold uppercase tracking-widest;
+  }
+
+  /* Mono display for scores/metrics */
+  .mono-display {
+    @apply font-mono font-bold;
+  }
+
+  /* Focus ring neubrutalist */
+  .focus-neu:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2;
+  }
+
+  /* Scrollbar styling */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #1A1A1A transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #1A1A1A;
+    border-radius: 3px;
+  }
+}

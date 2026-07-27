@@ -1,0 +1,29 @@
+{
+  "hero": {
+    "title": "Pelatih Public Speaking Berbasis AI",
+    "subtitle": "The Smart Mirror for Public Speaking.",
+    "cta": "Mulai Latihan Gratis",
+    "secondaryCta": "Pelajari Lebih Lanjut"
+  },
+  "features": {
+    "eyeContact": {
+      "title": "Pelacak Kontak Mata",
+      "description": "Deteksi arah pandangan secara real-time. Dapatkan umpan balik instan saat kamu terlalu lama tidak menatap kamera."
+    },
+    "posture": {
+      "title": "Penjaga Postur",
+      "description": "AI memantau bahasa tubuhmu — membungkuk, gelisah, dan tangan pasif. Dapatkan pengingat lembut untuk berdiri dengan percaya diri."
+    },
+    "filler": {
+      "title": "Penghitung Kata Pengisi",
+      "description": "Menangkap setiap \"eee\", \"emm\", dan \"apa namanya\" secara real-time. Pantau progresmu seiring kata pengisi berkurang."
+    },
+    "wpm": {
+      "title": "Pengukur Kecepatan Bicara",
+      "description": "Memantau kata per menit dengan rata-rata berjalan. Tetap di rentang ideal 100-160 WPM untuk penyampaian yang jelas."
+    }
+  },
+  "social": {
+    "trusted": "Dipercaya oleh pembicara di seluruh dunia"
+  }
+}

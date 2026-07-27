@@ -1,0 +1,16 @@
+{
+  "title": "Session Scorecard",
+  "totalScore": "Overall Score",
+  "bodyLanguage": "Body Language Score",
+  "voiceFluency": "Voice & Fluency Score",
+  "breakdown": "Score Breakdown",
+  "eyeContact": "Eye Contact",
+  "posture": "Posture",
+  "fillerWords": "Filler Words",
+  "wpmConsistency": "WPM Consistency",
+  "videoReplay": "Video Replay",
+  "markers": "Error Markers",
+  "share": "Share Results",
+  "download": "Download Report",
+  "practiceAgain": "Practice Again"
+}
