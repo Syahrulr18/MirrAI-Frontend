@@ -1,5 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { FilesetResolver, FaceLandmarker } from "@mediapipe/tasks-vision";
+import { suppressMediaPipeWasmLogs } from "../lib/suppressWasmLogs";
+
+suppressMediaPipeWasmLogs();
 
 export interface FaceDetectionResult {
   isEyeContactGood: boolean;

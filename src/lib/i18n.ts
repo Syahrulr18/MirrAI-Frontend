@@ -10,7 +10,7 @@ i18n
   .init({
     fallbackLng: "en",
     supportedLngs: ["en", "id"],
-    ns: ["common", "landing", "practice", "scorecard", "chatbot", "gamification"],
+    ns: ["common", "landing", "practice", "scorecard", "chatbot", "gamification", "writer"],
     defaultNS: "common",
     detection: {
       order: ["localStorage"],

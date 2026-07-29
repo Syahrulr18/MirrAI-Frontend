@@ -154,17 +154,19 @@ export default function PracticeSetupPage() {
                   clickable
                   className={`text-center py-6 border-3 transition-all ${
                     isSelected
-                      ? `border-neutral ${m.color} text-neutral shadow-neu translate-x-[-2px] translate-y-[-2px]`
-                      : "border-neutral/30 hover:border-neutral bg-white dark:bg-surface-dark"
+                      ? `border-neutral dark:border-white ${m.color} text-neutral shadow-neu dark:shadow-[4px_4px_0_rgba(255,255,255,1)] translate-x-[-2px] translate-y-[-2px]`
+                      : "border-neutral/30 hover:border-neutral dark:border-white/30 dark:hover:border-white bg-white dark:bg-surface-dark"
                   }`}
                   onClick={() => setMode(m.key as any)}
                 >
                   <div
-                    className={`w-14 h-14 mx-auto mb-3 rounded-neu border-3 border-neutral flex items-center justify-center ${
-                      isSelected ? "bg-white" : "bg-neutral/5 dark:bg-white/5"
+                    className={`w-14 h-14 mx-auto mb-3 rounded-neu border-3 flex items-center justify-center transition-colors ${
+                      isSelected 
+                        ? "bg-white border-neutral" 
+                        : "bg-neutral/5 dark:bg-white/5 border-neutral dark:border-white"
                     }`}
                   >
-                    <Icon size={26} className="text-neutral" />
+                    <Icon size={26} className={isSelected ? "text-neutral" : "text-neutral dark:text-white"} />
                   </div>
                   <p className={`font-bold text-sm ${isSelected ? "text-neutral" : "text-neutral dark:text-white"}`}>
                     {t(`modes.${m.i18nKey}`)}
@@ -187,7 +189,7 @@ export default function PracticeSetupPage() {
         </section>
         
         {/* 2.5 Teleprompter Speed */}
-        <section className="bg-primary/20 dark:bg-primary/10 border-4 border-neutral p-6 rounded-neu-lg shadow-neu mt-8">
+        <section className="bg-primary/20 dark:bg-primary/10 border-4 border-neutral dark:border-white p-6 rounded-neu-lg shadow-neu dark:shadow-[4px_4px_0_rgba(255,255,255,1)] mt-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-lg font-bold text-neutral dark:text-white">
               {t("setup.speed", "Teleprompter Speed (WPM)")}
@@ -205,9 +207,8 @@ export default function PracticeSetupPage() {
               step="10"
               value={useSessionStore.getState().teleprompterSpeed}
               onChange={(e) => useSessionStore.getState().setTeleprompterSpeed(Number(e.target.value))}
-              className="w-full h-4 bg-white dark:bg-surface-dark border-3 border-neutral rounded-full appearance-none cursor-pointer accent-neutral"
+              className="w-full h-4 bg-white dark:bg-surface-dark border-3 border-neutral dark:border-white rounded-full appearance-none cursor-pointer accent-neutral"
               style={{
-                // Quick hack for custom slider thumb in generic CSS, though standard accent-color does an okay job
                 accentColor: 'currentColor'
               }}
             />
@@ -225,15 +226,15 @@ export default function PracticeSetupPage() {
             {t("setup.selectScript", "Selected Script")}
           </h2>
           {scriptTitle ? (
-            <Card className="flex items-center justify-between border-3 border-neutral bg-success/10">
+            <Card className="flex items-center justify-between border-3 border-neutral dark:border-white bg-success/10 dark:bg-success/20">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-neu border-2 border-neutral bg-success flex items-center justify-center">
+                <div className="w-10 h-10 rounded-neu border-2 border-neutral dark:border-white bg-success flex items-center justify-center">
                   <CheckCircle2 size={20} className="text-neutral" />
                 </div>
                 <div>
                   <h4 className="font-bold text-neutral dark:text-white">{scriptTitle}</h4>
                   <p className="text-xs text-neutral/60 dark:text-white/50">
-                    Script loaded into Teleprompter
+                    {t("setup.loadedScript", "Script loaded into Teleprompter")}
                   </p>
                 </div>
               </div>
@@ -242,11 +243,11 @@ export default function PracticeSetupPage() {
                 size="sm"
                 onClick={() => setScript("", "")}
               >
-                Clear
+                {t("setup.clear", "Clear")}
               </Button>
             </Card>
           ) : (
-            <Card className="flex flex-col md:flex-row items-center justify-between border-2 border-dashed border-neutral/40 p-4 gap-4">
+            <Card className="flex flex-col md:flex-row items-center justify-between border-2 border-dashed border-neutral/40 dark:border-white/40 p-4 gap-4">
               <div className="flex items-center gap-3 w-full md:w-auto">
                 <FileText size={24} className="text-neutral/40 dark:text-white/30" />
                 <div>
@@ -254,17 +255,23 @@ export default function PracticeSetupPage() {
                     {t("setup.freestyle", "Freestyle Mode (No Script)")}
                   </h4>
                   <p className="text-xs text-neutral/50 dark:text-white/40">
-                    Speak freely, browse templates, or upload your own text (.txt, .pdf, .docx)
+                    {t("setup.uploadScript", "Upload a script file or select from templates")}
+                  </p>
+                  <p className="text-xs text-neutral/50 dark:text-white/40">
+                    {t("setup.pasteScript", "Or paste text in the Editor / AI Writer")}
+                  </p>
+                  <p className="text-xs font-mono text-neutral/40 dark:text-white/30 mt-1">
+                    {t("setup.uploadFormats", "Supports .txt, .pdf, .docx")}
                   </p>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2 w-full md:w-auto">
+              <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
                 <Button
                   variant="secondary"
                   size="sm"
                   onClick={() => navigate("/templates")}
                 >
-                  Browse Templates
+                  {t("setup.browseTemplates", "Browse Templates")}
                 </Button>
                 <div className="relative">
                   <input
@@ -273,9 +280,10 @@ export default function PracticeSetupPage() {
                     onChange={handleFileUpload}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     disabled={isUploading}
+                    id="script-upload"
                   />
-                  <Button variant="secondary" size="sm" disabled={isUploading}>
-                    {isUploading ? "Extracting..." : "Upload File"}
+                  <Button variant="secondary" size="sm" as="label" htmlFor="script-upload" className="cursor-pointer" disabled={isUploading}>
+                    {isUploading ? "..." : t("setup.selectFile", "Select File")}
                   </Button>
                 </div>
               </div>

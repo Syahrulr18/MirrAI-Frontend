@@ -1,5 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { FilesetResolver, PoseLandmarker } from "@mediapipe/tasks-vision";
+import { suppressMediaPipeWasmLogs } from "../lib/suppressWasmLogs";
+
+suppressMediaPipeWasmLogs();
 
 export interface PoseDetectionResult {
   isPostureGood: boolean;

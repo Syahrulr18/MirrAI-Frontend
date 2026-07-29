@@ -39,12 +39,12 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
       {/* Desktop Header */}
       <header className="sticky top-0 z-sticky-nav bg-white/95 dark:bg-surface-dark/95 backdrop-blur-sm border-b-3 border-neutral shadow-sm">
         <div className="max-w-content mx-auto px-app-gap flex items-center justify-between h-16">
-          <span 
-            className="text-2xl font-hero text-neutral dark:text-white cursor-pointer select-none"
+          <div 
+            className="cursor-pointer select-none flex items-center"
             onClick={() => navigate("/dashboard")}
           >
-            MirrAI
-          </span>
+            <img src="/logo_MirrAI.svg" alt="MirrAI Logo" className="h-8 dark:invert" />
+          </div>
           
           <nav className="hidden md:flex items-center gap-6">
             {navItems.map((item) => {

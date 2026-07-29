@@ -15,7 +15,14 @@ export function useSpeechAnalyzer() {
   const lastProcessedIndexRef = useRef<number>(0);
   const spokenWordsTimeRef = useRef<{ timestamp: number; wordCount: number }[]>([]);
 
+  // Accumulated final transcript (only confirmed results, not interim)
+  const finalTranscriptRef = useRef<string>("");
+
   const { isRecording, addFillerWord, updateWpm } = useSessionStore();
+
+  // Pause Detection refs
+  const lastSpeechTimeRef = useRef<number>(Date.now());
+  const pauseReportedRef = useRef<boolean>(false);
 
   useEffect(() => {
     // Check SpeechRecognition support
@@ -31,22 +38,34 @@ export function useSpeechAnalyzer() {
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
     recognition.lang = lang === "id" ? "id-ID" : "en-US";
 
     recognition.onresult = (event: any) => {
-      let currentFullTranscript = "";
+      let interimTranscript = "";
+      let sessionFinalTranscript = "";
+
       for (let i = 0; i < event.results.length; i++) {
-        currentFullTranscript += event.results[i][0].transcript + " ";
+        const result = event.results[i];
+        const text = result[0].transcript;
+
+        if (result.isFinal) {
+          sessionFinalTranscript += text + " ";
+        } else {
+          interimTranscript += text + " ";
+        }
       }
 
+      // Build current full transcript: accumulated finals + current session finals + interim
+      const currentFullTranscript = finalTranscriptRef.current + sessionFinalTranscript + interimTranscript;
       setTranscript(currentFullTranscript);
 
-      // Process new words for filler words
+      // Process new words for filler words (only process new content)
       const newText = currentFullTranscript.substring(lastProcessedIndexRef.current);
 
       if (newText.trim().length > 0) {
         lastSpeechTimeRef.current = Date.now();
-        pauseReportedRef.current = false; // Reset the pause flag so they can trigger another one later
+        pauseReportedRef.current = false;
 
         const foundFillers = detectFillerWords(newText, lang);
         if (foundFillers.length > 0) {
@@ -81,26 +100,39 @@ export function useSpeechAnalyzer() {
     };
 
     recognition.onerror = (err: any) => {
-      if (err.error !== "no-speech") {
+      if (err.error !== "no-speech" && err.error !== "aborted") {
         console.warn("[SpeechRecognition Error]", err.error);
         if (err.error === "not-allowed") {
-          setIsSupported(false); // Stop trying if user denied mic
+          setIsSupported(false);
         }
       }
     };
 
     recognition.onend = () => {
-      // Auto-restart if session is still recording and it is supported (not denied)
+      // When recognition ends and restarts, accumulate the finals from the previous session
+      // This is important because SpeechRecognition resets event.results on restart
+      const currentTranscriptValue = finalTranscriptRef.current;
+
+      // Auto-restart if session is still recording
       if (useSessionStore.getState().isRecording && recognitionRef.current && isSupported) {
-        setTimeout(() => {
-          try {
-            if (useSessionStore.getState().isRecording) {
-              recognitionRef.current.start();
+        // Save the current full transcript before restart
+        // On restart, event.results resets, so we need to preserve what was finalized
+        const SpeechRecognitionLocal =
+          (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        if (SpeechRecognitionLocal) {
+          setTimeout(() => {
+            try {
+              if (useSessionStore.getState().isRecording) {
+                // Accumulate what we had into finalTranscriptRef
+                // The transcript state already has the full text
+                finalTranscriptRef.current = currentTranscriptValue;
+                recognitionRef.current.start();
+              }
+            } catch (e) {
+              // Ignore restart error if already started
             }
-          } catch (e) {
-            // Ignore restart error if already started
-          }
-        }, 300); // slight delay to prevent rapid crash looping
+          }, 200);
+        }
       } else {
         setIsListening(false);
       }
@@ -116,6 +148,7 @@ export function useSpeechAnalyzer() {
         spokenWordsTimeRef.current = [];
         lastSpeechTimeRef.current = Date.now();
         pauseReportedRef.current = false;
+        finalTranscriptRef.current = "";
         setTranscript("");
         recognitionRef.current.start();
         setIsListening(true);
@@ -146,9 +179,6 @@ export function useSpeechAnalyzer() {
   }, [isRecording, startListening, stopListening]);
 
   // Pause Detection
-  const lastSpeechTimeRef = useRef<number>(Date.now());
-  const pauseReportedRef = useRef<boolean>(false);
-
   useEffect(() => {
     if (!isRecording) return;
 
@@ -159,7 +189,7 @@ export function useSpeechAnalyzer() {
       // If no speech for 7 seconds, count as a "Long Pause" filler
       if (timeSinceLastSpeech >= 7000 && !pauseReportedRef.current) {
         useSessionStore.getState().addFillerWord("[Long Pause]");
-        pauseReportedRef.current = true; // prevent spamming until they speak again
+        pauseReportedRef.current = true;
       }
     }, 1000);
 

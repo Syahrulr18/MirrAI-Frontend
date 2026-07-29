@@ -65,6 +65,10 @@ export default function PracticeRoomPage() {
   const { isLoaded: isHandReady, detectFrame: detectHand } = useHandLandmarker();
   const { transcript } = useSpeechAnalyzer(); // starts/stops listening based on isRecording in store
 
+  // Keep a ref to always have the latest transcript (avoids stale closure in handleStopSession)
+  const transcriptRef = useRef(transcript);
+  useEffect(() => { transcriptRef.current = transcript; }, [transcript]);
+
   const remainingSeconds = Math.max(0, targetDurationSeconds - elapsedSeconds);
   const isOneMinuteWarning = remainingSeconds <= 60 && remainingSeconds > 0;
 
@@ -132,7 +136,7 @@ export default function PracticeRoomPage() {
     let cachedPose: any[] = [];
 
     const loop = (now: number) => {
-      if (now - lastTime >= 80) { // ~12 fps
+      if (now - lastTime >= 200) { // ~5 fps (reduced from 12fps to fix web lag)
         lastTime = now;
         const video = webcamRef.current?.video;
         const canvas = canvasRef.current;
@@ -282,13 +286,14 @@ export default function PracticeRoomPage() {
   // ── 5. Stop Session ─────────────────────────────────────────
 
   const handleStopSession = useCallback(() => {
-    if (!isRecording) return;
+    if (!useSessionStore.getState().isRecording) return;
     hasStartedRef.current = false;
     setRecording(false);
     
     // Compute Script Accuracy if there's a script
     if (scriptContent) {
-      const accuracyResult = calculateScriptAccuracy(scriptContent, transcript);
+      const currentTranscript = transcriptRef.current;
+      const accuracyResult = calculateScriptAccuracy(scriptContent, currentTranscript);
       useSessionStore.getState().setScriptAccuracy(accuracyResult.accuracyPercentage);
     } else {
       useSessionStore.getState().setScriptAccuracy(null);
@@ -306,7 +311,7 @@ export default function PracticeRoomPage() {
       ?.getTracks()
       .forEach((track) => track.stop());
     navigate("/scorecard/new");
-  }, [setRecording, navigate, scriptContent, transcript]);
+  }, [setRecording, navigate, scriptContent]);
 
   // ── Helpers ─────────────────────────────────────────────────
   const formatTime = (secs: number) => {

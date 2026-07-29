@@ -1,5 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
+import { suppressMediaPipeWasmLogs } from "../lib/suppressWasmLogs";
+
+suppressMediaPipeWasmLogs();
 
 export interface HandLandmarkPoint {
   x: number; // Normalized 0..1

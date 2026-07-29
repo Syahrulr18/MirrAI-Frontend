@@ -7,9 +7,20 @@
   "setup": {
     "title": "Pengaturan Latihan",
     "selectMode": "Pilih Mode Latihan",
-    "selectScript": "Pilih Naskah (Opsional)",
+    "selectScript": "Naskah Terpilih",
     "freestyle": "Mode Bebas",
     "setDuration": "Target Durasi (menit)",
+    "speed": "Kecepatan Teleprompter (KPM)",
+    "slow": "Lambat",
+    "normal": "Normal",
+    "fast": "Cepat",
+    "loadedScript": "Naskah berhasil dimuat ke Teleprompter",
+    "clear": "Hapus",
+    "uploadScript": "Unggah file naskah atau pilih dari template",
+    "pasteScript": "Atau salin teks di Editor / AI Writer",
+    "uploadFormats": "Mendukung format .txt, .pdf, .docx",
+    "selectFile": "Pilih File",
+    "browseTemplates": "Telusuri Template",
     "startSession": "Mulai Sesi"
   },
   "room": {

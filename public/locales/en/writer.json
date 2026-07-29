@@ -1,0 +1,16 @@
+{
+  "title": "AI Script Writer",
+  "subtitle": "Draft, review, and perfect your speech with AI",
+  "useForPractice": "Use for Practice",
+  "scriptTitlePlaceholder": "Script Title (e.g., Graduation Speech)",
+  "scriptContentPlaceholder": "Write your speech here, or ask AI for a draft...",
+  "reviewScript": "Review Script",
+  "catchyOpening": "Catchy Opening",
+  "strongClosing": "Strong Closing",
+  "aiConsultant": "AI Consultant",
+  "words": "Words",
+  "alertNoContent": "Please write some script content first.",
+  "aiGreeting": "Hello! I am your AI Script Consultant. I can help you brainstorm ideas, generate openings, or review your speech script. How can I assist you today?",
+  "aiError": "I'm sorry, I couldn't process that.",
+  "aiConnectionError": "Sorry, I am having trouble connecting right now."
+}

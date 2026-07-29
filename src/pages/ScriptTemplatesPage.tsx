@@ -118,7 +118,10 @@ export default function ScriptTemplatesPage() {
     : scripts;
 
   const handleUseScript = (scriptId: string) => {
-    navigate("/practice/setup", { state: { scriptId } });
+    const script = scripts.find((s) => s.id === scriptId);
+    if (script) {
+      navigate("/script-writer", { state: { title: script.title, content: script.content } });
+    }
   };
 
   const handleEditScript = (script: ScriptTemplate) => {

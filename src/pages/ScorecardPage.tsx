@@ -347,16 +347,26 @@ export default function ScorecardPage() {
           )}
         </Card>
 
-        {/* Action button */}
-        <Button
-          variant="primary"
-          size="lg"
-          fullWidth
-          leftIcon={<RotateCcw size={18} />}
-          onClick={handlePracticeAgain}
-        >
-          {t("practiceAgain", "Start New Practice Session")}
-        </Button>
+        {/* Action buttons */}
+        <div className="flex flex-col gap-4">
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            leftIcon={<RotateCcw size={18} />}
+            onClick={handlePracticeAgain}
+          >
+            {t("practiceAgain", "Start New Practice Session")}
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            fullWidth
+            onClick={handleReturnDashboard}
+          >
+            {t("continue", "Continue")}
+          </Button>
+        </div>
       </main>
     </motion.div>
   );

@@ -1,0 +1,16 @@
+{
+  "title": "Penulis Naskah AI",
+  "subtitle": "Rancang, ulas, dan sempurnakan pidato Anda dengan AI",
+  "useForPractice": "Gunakan untuk Latihan",
+  "scriptTitlePlaceholder": "Judul Naskah (contoh: Pidato Kelulusan)",
+  "scriptContentPlaceholder": "Tulis pidato Anda di sini, atau minta draf dari AI...",
+  "reviewScript": "Ulas Naskah",
+  "catchyOpening": "Pembukaan Menarik",
+  "strongClosing": "Penutupan Kuat",
+  "aiConsultant": "Konsultan AI",
+  "words": "Kata",
+  "alertNoContent": "Mohon tulis beberapa teks naskah terlebih dahulu.",
+  "aiGreeting": "Halo! Saya adalah Konsultan Naskah AI Anda. Saya bisa membantu Anda mencari ide, membuat kalimat pembuka, atau mengulas naskah pidato Anda. Ada yang bisa saya bantu hari ini?",
+  "aiError": "Maaf, saya tidak dapat memproses permintaan tersebut.",
+  "aiConnectionError": "Maaf, saya sedang mengalami kendala koneksi saat ini."
+}

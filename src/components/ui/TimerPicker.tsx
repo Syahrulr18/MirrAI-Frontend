@@ -37,50 +37,50 @@ export const TimerPicker: React.FC<TimerPickerProps> = ({ initialSeconds, onChan
   };
 
   return (
-    <div className="flex items-center justify-center gap-4 text-neutral font-mono bg-warning/20 border-4 border-neutral rounded-neu-lg p-6 shadow-[4px_4px_0_rgba(26,26,26,1)] inline-flex">
+    <div className="flex items-center justify-center gap-4 text-neutral dark:text-white font-mono bg-warning/20 dark:bg-warning/10 border-4 border-neutral dark:border-white rounded-neu-lg p-6 shadow-[4px_4px_0_rgba(26,26,26,1)] dark:shadow-[4px_4px_0_rgba(255,255,255,1)] inline-flex transition-colors">
       {/* Minutes Column */}
       <div className="flex flex-col items-center gap-2 w-20">
         <button
           onClick={() => handleMinChange(1)}
-          className="p-2 w-full flex justify-center rounded-neu border-2 border-neutral bg-white hover:bg-neutral/10 hover:-translate-y-0.5 active:translate-y-0 shadow-neu-sm transition-all"
+          className="p-2 w-full flex justify-center rounded-neu border-2 border-neutral dark:border-white bg-white dark:bg-surface-dark hover:bg-neutral/10 dark:hover:bg-white/10 hover:-translate-y-0.5 active:translate-y-0 shadow-neu-sm dark:shadow-[2px_2px_0_rgba(255,255,255,1)] transition-all"
         >
-          <ChevronUp size={24} className="text-neutral" />
+          <ChevronUp size={24} className="text-neutral dark:text-white" />
         </button>
-        <span className="text-5xl font-black tabular-nums select-none my-2 text-neutral">
+        <span className="text-5xl font-black tabular-nums select-none my-2 text-neutral dark:text-white">
           {minutes.toString().padStart(2, "0")}
         </span>
         <button
           onClick={() => handleMinChange(-1)}
-          className="p-2 w-full flex justify-center rounded-neu border-2 border-neutral bg-white hover:bg-neutral/10 hover:-translate-y-0.5 active:translate-y-0 shadow-neu-sm transition-all"
+          className="p-2 w-full flex justify-center rounded-neu border-2 border-neutral dark:border-white bg-white dark:bg-surface-dark hover:bg-neutral/10 dark:hover:bg-white/10 hover:-translate-y-0.5 active:translate-y-0 shadow-neu-sm dark:shadow-[2px_2px_0_rgba(255,255,255,1)] transition-all"
         >
-          <ChevronDown size={24} className="text-neutral" />
+          <ChevronDown size={24} className="text-neutral dark:text-white" />
         </button>
-        <span className="text-xs uppercase font-black text-neutral/70 mt-2 font-sans tracking-wider">
+        <span className="text-xs uppercase font-black text-neutral/70 dark:text-white/70 mt-2 font-sans tracking-wider">
           Minutes
         </span>
       </div>
 
       {/* Separator */}
-      <div className="text-4xl font-black pb-8 opacity-40 text-neutral mx-2">:</div>
+      <div className="text-4xl font-black pb-8 opacity-40 text-neutral dark:text-white mx-2">:</div>
 
       {/* Seconds Column */}
       <div className="flex flex-col items-center gap-2 w-20">
         <button
           onClick={() => handleSecChange(15)}
-          className="p-2 w-full flex justify-center rounded-neu border-2 border-neutral bg-white hover:bg-neutral/10 hover:-translate-y-0.5 active:translate-y-0 shadow-neu-sm transition-all"
+          className="p-2 w-full flex justify-center rounded-neu border-2 border-neutral dark:border-white bg-white dark:bg-surface-dark hover:bg-neutral/10 dark:hover:bg-white/10 hover:-translate-y-0.5 active:translate-y-0 shadow-neu-sm dark:shadow-[2px_2px_0_rgba(255,255,255,1)] transition-all"
         >
-          <ChevronUp size={24} className="text-neutral" />
+          <ChevronUp size={24} className="text-neutral dark:text-white" />
         </button>
-        <span className="text-5xl font-black tabular-nums select-none my-2 text-neutral">
+        <span className="text-5xl font-black tabular-nums select-none my-2 text-neutral dark:text-white">
           {seconds.toString().padStart(2, "0")}
         </span>
         <button
           onClick={() => handleSecChange(-15)}
-          className="p-2 w-full flex justify-center rounded-neu border-2 border-neutral bg-white hover:bg-neutral/10 hover:-translate-y-0.5 active:translate-y-0 shadow-neu-sm transition-all"
+          className="p-2 w-full flex justify-center rounded-neu border-2 border-neutral dark:border-white bg-white dark:bg-surface-dark hover:bg-neutral/10 dark:hover:bg-white/10 hover:-translate-y-0.5 active:translate-y-0 shadow-neu-sm dark:shadow-[2px_2px_0_rgba(255,255,255,1)] transition-all"
         >
-          <ChevronDown size={24} className="text-neutral" />
+          <ChevronDown size={24} className="text-neutral dark:text-white" />
         </button>
-        <span className="text-xs uppercase font-black text-neutral/70 mt-2 font-sans tracking-wider">
+        <span className="text-xs uppercase font-black text-neutral/70 dark:text-white/70 mt-2 font-sans tracking-wider">
           Seconds
         </span>
       </div>

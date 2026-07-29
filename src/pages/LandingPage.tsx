@@ -187,9 +187,9 @@ export default function LandingPage() {
       {/* ─── Navbar ───────────────────────────────────────── */}
       <nav className="sticky top-0 z-sticky-nav bg-white/95 dark:bg-surface-dark/95 backdrop-blur-sm border-b-3 border-neutral">
         <div className="max-w-content mx-auto px-app-gap flex items-center justify-between h-16">
-          <span className="text-2xl font-hero text-neutral dark:text-white select-none">
-            MirrAI
-          </span>
+          <div className="flex items-center select-none">
+            <img src="/logo_MirrAI.svg" alt="MirrAI Logo" className="h-8 dark:invert" />
+          </div>
           <div className="flex items-center gap-3">
             <select
               value={i18n.language}

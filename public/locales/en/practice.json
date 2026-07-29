@@ -10,6 +10,17 @@
     "selectScript": "Choose a Script (Optional)",
     "freestyle": "Freestyle Mode",
     "setDuration": "Target Duration (minutes)",
+    "speed": "Teleprompter Speed (WPM)",
+    "slow": "Slow",
+    "normal": "Normal",
+    "fast": "Fast",
+    "loadedScript": "Script loaded into Teleprompter",
+    "clear": "Clear",
+    "uploadScript": "Upload a script file or select from templates",
+    "pasteScript": "Or paste text in the Editor / AI Writer",
+    "uploadFormats": "Supports .txt, .pdf, .docx",
+    "selectFile": "Select File",
+    "browseTemplates": "Browse Templates",
     "startSession": "Start Session"
   },
   "room": {

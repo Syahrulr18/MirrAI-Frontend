@@ -35,18 +35,18 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {/* Wordmark with hard-drop animation */}
-          <motion.h1
-            className="text-hero font-hero text-primary select-none"
+          {/* Logo with hard-drop animation */}
+          <motion.img
+            src="/logo_MirrAI.svg"
+            alt="MirrAI Logo"
+            className="h-14 sm:h-20 invert select-none"
             initial={{ y: -40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{
               duration: 0.9,
               ease: [0.34, 1.56, 0.64, 1], // bounce ease
             }}
-          >
-            MirrAI
-          </motion.h1>
+          />
 
           {/* Shadow pop after wordmark lands */}
           <motion.div
