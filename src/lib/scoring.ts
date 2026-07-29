@@ -5,6 +5,7 @@ export interface RawSessionMetrics {
   fillerWordCount: number;
   avgWpm: number;
   postureFlagsCount: number;
+  scriptAccuracy?: number;
 }
 
 export interface CalculatedScores {
@@ -48,8 +49,17 @@ export function calculateScorecard(metrics: RawSessionMetrics): CalculatedScores
   // Voice & Fluency Score = 50% WPM + 50% Filler score
   const voiceFluencyScore = Math.round(wpmScore * 0.5 + fillerScore * 0.5);
 
-  // Overall Score = 50% Body Language + 50% Voice & Fluency
-  const totalScore = Math.round(bodyLanguageScore * 0.5 + voiceFluencyScore * 0.5);
+  // Overall Score (Incorporate script accuracy if present)
+  let totalScore = 0;
+  if (metrics.scriptAccuracy !== undefined && metrics.scriptAccuracy !== null) {
+    // 35% Body Language + 35% Voice & Fluency + 30% Script Accuracy
+    totalScore = Math.round(
+      bodyLanguageScore * 0.35 + voiceFluencyScore * 0.35 + metrics.scriptAccuracy * 0.30
+    );
+  } else {
+    // 50% Body Language + 50% Voice & Fluency
+    totalScore = Math.round(bodyLanguageScore * 0.5 + voiceFluencyScore * 0.5);
+  }
 
   return {
     totalScore,

@@ -5,6 +5,10 @@ export interface FillerTimestamp {
   atSecond: number;
 }
 
+export interface EyeContactFlag {
+  atSecond: number;
+}
+
 export interface PostureFlag {
   type: "slouch" | "fidget" | "passive_hands";
   atSecond: number;
@@ -18,9 +22,11 @@ export interface WpmSample {
 interface SessionState {
   // Config
   mode: "THESIS_DEFENSE" | "JOB_INTERVIEW_PITCH" | "PUBLIC_SPEECH";
-  targetDurationMinutes: number;
+  targetDurationSeconds: number;
+  teleprompterSpeed: number;
   scriptContent: string;
   scriptTitle: string;
+  scriptAccuracy: number | null;
 
   // Live Status
   isRecording: boolean;
@@ -30,6 +36,7 @@ interface SessionState {
   isEyeContactGood: boolean;
   eyeContactGoodSec: number;
   eyeContactBadSec: number;
+  eyeContactFlags: EyeContactFlag[];
 
   // Posture
   isPostureGood: boolean;
@@ -47,8 +54,10 @@ interface SessionState {
 
   // Actions
   setMode: (mode: "THESIS_DEFENSE" | "JOB_INTERVIEW_PITCH" | "PUBLIC_SPEECH") => void;
-  setTargetDurationMinutes: (minutes: number) => void;
+  setTargetDurationSeconds: (seconds: number) => void;
+  setTeleprompterSpeed: (speed: number) => void;
   setScript: (title: string, content: string) => void;
+  setScriptAccuracy: (accuracy: number) => void;
   setRecording: (isRecording: boolean) => void;
   setElapsedSeconds: (seconds: number) => void;
   updateEyeContact: (isGood: boolean) => void;
@@ -56,14 +65,17 @@ interface SessionState {
   addFillerWord: (word: string) => void;
   updateWpm: (wpm: number) => void;
   setRecordedBlobUrl: (url: string | null) => void;
+  prepareForNewSession: () => void;
   resetSession: () => void;
 }
 
 const initialState = {
   mode: "PUBLIC_SPEECH" as const,
-  targetDurationMinutes: 5,
+  targetDurationSeconds: 300, // 5 minutes default
+  teleprompterSpeed: 120, // Default WPM for teleprompter
   scriptContent: "",
   scriptTitle: "",
+  scriptAccuracy: null,
 
   isRecording: false,
   elapsedSeconds: 0,
@@ -71,6 +83,7 @@ const initialState = {
   isEyeContactGood: true,
   eyeContactGoodSec: 0,
   eyeContactBadSec: 0,
+  eyeContactFlags: [],
 
   isPostureGood: true,
   postureFlags: [],
@@ -88,18 +101,28 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   ...initialState,
 
   setMode: (mode) => set({ mode }),
-  setTargetDurationMinutes: (targetDurationMinutes) => set({ targetDurationMinutes }),
+  setTargetDurationSeconds: (targetDurationSeconds) => set({ targetDurationSeconds }),
+  setTeleprompterSpeed: (teleprompterSpeed) => set({ teleprompterSpeed }),
   setScript: (scriptTitle, scriptContent) => set({ scriptTitle, scriptContent }),
+  setScriptAccuracy: (accuracy) => set({ scriptAccuracy: accuracy }),
   setRecording: (isRecording) => set({ isRecording }),
   setElapsedSeconds: (elapsedSeconds) => set({ elapsedSeconds }),
 
   updateEyeContact: (isGood) => {
     const state = get();
     if (!state.isRecording) return;
+    
+    // Only record a flag once when it transitions from good to bad
+    const newFlags = [...state.eyeContactFlags];
+    if (!isGood && state.isEyeContactGood) {
+      newFlags.push({ atSecond: state.elapsedSeconds });
+    }
+
     set({
       isEyeContactGood: isGood,
       eyeContactGoodSec: isGood ? state.eyeContactGoodSec + 1 : state.eyeContactGoodSec,
       eyeContactBadSec: !isGood ? state.eyeContactBadSec + 1 : state.eyeContactBadSec,
+      eyeContactFlags: newFlags,
     });
   },
 
@@ -145,5 +168,22 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   },
 
   setRecordedBlobUrl: (recordedBlobUrl) => set({ recordedBlobUrl }),
+  prepareForNewSession: () => set((state) => ({
+    ...state,
+    isRecording: false,
+    elapsedSeconds: 0,
+    isEyeContactGood: true,
+    eyeContactGoodSec: 0,
+    eyeContactBadSec: 0,
+    eyeContactFlags: [],
+    isPostureGood: true,
+    postureFlags: [],
+    currentWpm: 0,
+    avgWpm: 0,
+    wpmSamples: [],
+    fillerWordCount: 0,
+    fillerWordTimestamps: [],
+    recordedBlobUrl: null,
+  })),
   resetSession: () => set(initialState),
 }));

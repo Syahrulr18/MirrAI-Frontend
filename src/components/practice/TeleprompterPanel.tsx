@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import { Card, Button } from "../ui";
+import { useSessionStore } from "../../store/sessionStore";
 
 interface TeleprompterPanelProps {
   scriptTitle?: string;
@@ -15,18 +16,51 @@ export const TeleprompterPanel: React.FC<TeleprompterPanelProps> = ({
   isRecording,
 }) => {
   const { t } = useTranslation("practice");
-  const [scrollSpeed, setScrollSpeed] = useState<number>(30); // px per second
+  
+  // Convert WPM from setup page to approx pixels per second (much slower now: WPM / 8)
+  const initialSpeed = Math.round(useSessionStore.getState().teleprompterSpeed / 8) || 15;
+  
+  const [scrollSpeed, setScrollSpeed] = useState<number>(initialSpeed); // px per second
   const [isAutoScrolling, setIsAutoScrolling] = useState<boolean>(true);
+  const [countdown, setCountdown] = useState<number | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollAnimRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!isRecording || !isAutoScrolling) {
+    if (!isRecording) {
+      setCountdown(null);
       if (scrollAnimRef.current) cancelAnimationFrame(scrollAnimRef.current);
       return;
     }
 
+    if (!isAutoScrolling) {
+      if (scrollAnimRef.current) cancelAnimationFrame(scrollAnimRef.current);
+      return;
+    }
+
+    // Start 5-second countdown before scrolling
+    let countdownValue = 5;
+    setCountdown(countdownValue);
+    
+    const countdownInterval = setInterval(() => {
+      countdownValue -= 1;
+      if (countdownValue > 0) {
+        setCountdown(countdownValue);
+      } else {
+        setCountdown(null);
+        clearInterval(countdownInterval);
+        startScrolling();
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(countdownInterval);
+      if (scrollAnimRef.current) cancelAnimationFrame(scrollAnimRef.current);
+    };
+  }, [isRecording, isAutoScrolling, scrollSpeed]);
+
+  const startScrolling = () => {
     let lastTime = performance.now();
 
     const step = (now: number) => {
@@ -41,11 +75,7 @@ export const TeleprompterPanel: React.FC<TeleprompterPanelProps> = ({
     };
 
     scrollAnimRef.current = requestAnimationFrame(step);
-
-    return () => {
-      if (scrollAnimRef.current) cancelAnimationFrame(scrollAnimRef.current);
-    };
-  }, [isRecording, isAutoScrolling, scrollSpeed]);
+  };
 
   const handleResetScroll = () => {
     if (containerRef.current) {
@@ -82,9 +112,14 @@ export const TeleprompterPanel: React.FC<TeleprompterPanelProps> = ({
       {/* Script text area */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto scrollbar-thin pr-2 space-y-4"
+        className="flex-1 overflow-y-auto scrollbar-thin pr-2 space-y-4 relative"
         style={{ maxHeight: "calc(100vh - 280px)" }}
       >
+        {countdown !== null && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-10 rounded-neu">
+            <span className="text-6xl font-black text-primary animate-pulse">{countdown}</span>
+          </div>
+        )}
         {scriptContent ? (
           <p className="text-white/90 text-lg md:text-xl font-medium leading-relaxed whitespace-pre-wrap">
             {scriptContent}
@@ -105,8 +140,8 @@ export const TeleprompterPanel: React.FC<TeleprompterPanelProps> = ({
         <div className="flex items-center gap-3">
           <input
             type="range"
-            min="10"
-            max="100"
+            min="5"
+            max="40"
             value={scrollSpeed}
             onChange={(e) => setScrollSpeed(Number(e.target.value))}
             className="w-24 accent-primary cursor-pointer"

@@ -57,5 +57,19 @@ export function detectFillerWords(text: string, lang: string = "en"): string[] {
     }
   }
 
+  // Dynamic regex for elongated filler sounds: eee, emmm, uhhh, ahhh, hmmm
+  const dynamicRegex = /\b([aeiou])\1{2,}\b|\b([h]?m+)\b|\b(u+h+)\b|\b(a+h+)\b/gi;
+  const dynamicMatches = lowerText.match(dynamicRegex);
+  
+  if (dynamicMatches) {
+    for (const match of dynamicMatches) {
+      const word = match.toLowerCase();
+      // Avoid pushing short common words that might get caught
+      if (word.length >= 3 && !matched.includes(word) && !dictionary.includes(word)) {
+        matched.push(word);
+      }
+    }
+  }
+
   return matched;
 }

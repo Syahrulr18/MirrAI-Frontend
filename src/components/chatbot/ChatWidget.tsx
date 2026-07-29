@@ -20,11 +20,6 @@ export function ChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Hide on practice room
-  if (location.pathname === "/practice/room") {
-    return null;
-  }
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -56,6 +51,11 @@ export function ChatWidget() {
     }
   };
 
+  // Hide on practice room — AFTER all hooks
+  if (location.pathname === "/practice/room") {
+    return null;
+  }
+
   return (
     <>
       <AnimatePresence>
@@ -65,7 +65,7 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-20 right-4 w-[350px] h-[500px] z-50 bg-surface dark:bg-surface-dark border-4 border-neutral rounded-neu-lg shadow-neu-lg flex flex-col overflow-hidden"
+            className="fixed bottom-40 right-4 w-[350px] h-[500px] z-50 bg-surface dark:bg-surface-dark border-4 border-neutral rounded-neu-lg shadow-neu-lg flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="bg-primary px-4 py-3 border-b-4 border-neutral flex justify-between items-center">
@@ -95,7 +95,12 @@ export function ChatWidget() {
                         : "bg-white text-neutral dark:bg-neutral dark:text-white"
                     }`}
                   >
-                    {msg.text}
+                    {msg.text.split(/(\*\*.*?\*\*)/g).map((part, index) => {
+                      if (part.startsWith("**") && part.endsWith("**")) {
+                        return <strong key={index}>{part.slice(2, -2)}</strong>;
+                      }
+                      return <span key={index}>{part}</span>;
+                    })}
                   </div>
                 </div>
               ))}
@@ -140,7 +145,7 @@ export function ChatWidget() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-4 right-4 w-14 h-14 bg-primary text-neutral border-4 border-neutral rounded-neu flex items-center justify-center shadow-neu z-50 hover:bg-primary/90 transition-colors"
+        className="fixed bottom-24 right-4 w-14 h-14 bg-primary text-neutral border-4 border-neutral rounded-neu flex items-center justify-center shadow-neu z-50 hover:bg-primary/90 transition-colors"
       >
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
       </motion.button>

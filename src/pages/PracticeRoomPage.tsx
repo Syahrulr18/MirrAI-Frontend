@@ -13,6 +13,7 @@ import { useSpeechAnalyzer } from "../hooks/useSpeechAnalyzer";
 import { EyeContactRing } from "../components/practice/EyeContactRing";
 import { PostureAlertToast } from "../components/practice/PostureAlertToast";
 import { TeleprompterPanel } from "../components/practice/TeleprompterPanel";
+import { calculateScriptAccuracy } from "../lib/scriptAccuracy";
 
 const pageTransition = {
   initial: { opacity: 0, scale: 0.98 },
@@ -39,7 +40,7 @@ export default function PracticeRoomPage() {
   const [showFinishModal, setShowFinishModal] = useState(false);
 
   const {
-    targetDurationMinutes,
+    targetDurationSeconds,
     scriptTitle,
     scriptContent,
     isRecording,
@@ -62,10 +63,9 @@ export default function PracticeRoomPage() {
     resetCalibration,
   } = usePoseLandmarker();
   const { isLoaded: isHandReady, detectFrame: detectHand } = useHandLandmarker();
-  useSpeechAnalyzer(); // starts/stops listening based on isRecording in store
+  const { transcript } = useSpeechAnalyzer(); // starts/stops listening based on isRecording in store
 
-  const targetSeconds = targetDurationMinutes * 60;
-  const remainingSeconds = Math.max(0, targetSeconds - elapsedSeconds);
+  const remainingSeconds = Math.max(0, targetDurationSeconds - elapsedSeconds);
   const isOneMinuteWarning = remainingSeconds <= 60 && remainingSeconds > 0;
 
   // ── 1. Camera Ready ─────────────────────────────────────────
@@ -117,10 +117,10 @@ export default function PracticeRoomPage() {
     const timer = setInterval(() => {
       const next = useSessionStore.getState().elapsedSeconds + 1;
       setElapsedSeconds(next);
-      if (next >= targetSeconds) setShowFinishModal(true);
+      if (next >= targetDurationSeconds) setShowFinishModal(true);
     }, 1000);
     return () => clearInterval(timer);
-  }, [isRecording, targetSeconds, setElapsedSeconds]);
+  }, [isRecording, targetDurationSeconds, setElapsedSeconds]);
 
   // ── 4. AI Detection Loop (5-Finger Hand + Shoulder & Pose + Face) ──────
   useEffect(() => {
@@ -280,19 +280,33 @@ export default function PracticeRoomPage() {
   ]);
 
   // ── 5. Stop Session ─────────────────────────────────────────
+
   const handleStopSession = useCallback(() => {
+    if (!isRecording) return;
+    hasStartedRef.current = false;
+    setRecording(false);
+    
+    // Compute Script Accuracy if there's a script
+    if (scriptContent) {
+      const accuracyResult = calculateScriptAccuracy(scriptContent, transcript);
+      useSessionStore.getState().setScriptAccuracy(accuracyResult.accuracyPercentage);
+    } else {
+      useSessionStore.getState().setScriptAccuracy(null);
+    }
+
     if (
       mediaRecorderRef.current &&
       mediaRecorderRef.current.state !== "inactive"
     ) {
       mediaRecorderRef.current.stop();
+    } else {
+      setShowFinishModal(true);
     }
-    setRecording(false);
     webcamRef.current?.stream
       ?.getTracks()
       .forEach((track) => track.stop());
     navigate("/scorecard/new");
-  }, [setRecording, navigate]);
+  }, [setRecording, navigate, scriptContent, transcript]);
 
   // ── Helpers ─────────────────────────────────────────────────
   const formatTime = (secs: number) => {
@@ -314,8 +328,8 @@ export default function PracticeRoomPage() {
   return (
     <motion.div
       {...pageTransition}
-      className={`min-h-[100dvh] bg-neutral transition-colors duration-500 ${
-        isOneMinuteWarning ? "bg-warning/20" : ""
+      className={`min-h-[100dvh] transition-colors duration-1000 ${
+        isOneMinuteWarning ? "bg-black" : "bg-neutral"
       }`}
     >
       {/* Loading overlay */}
@@ -407,7 +421,7 @@ export default function PracticeRoomPage() {
                 </div>
               </div>
 
-              {/* Countdown Timer & Skeleton Toggle — Top Right */}
+                {/* Countdown Timer & Skeleton Toggle — Top Right */}
               <div className="absolute top-4 right-4 z-10 flex gap-2">
                 <button
                   onClick={() => setShowSkeleton(!showSkeleton)}
@@ -436,6 +450,29 @@ export default function PracticeRoomPage() {
                   </span>
                 </div>
               </div>
+
+              {/* Live Transcript (Subtitles) - Bottom */}
+              {isRecording && (
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-3/4 max-w-lg z-10 pointer-events-none">
+                  <div className="bg-neutral/80 backdrop-blur-md rounded-neu-lg border-2 border-white/20 p-3 shadow-neu text-center">
+                    <p className="text-white font-medium text-sm md:text-base leading-relaxed h-12 overflow-hidden flex items-end justify-center">
+                      {transcript.trim().length > 0 ? (
+                         <span className="animate-fade-in">
+                           {/* Get last 15 words of transcript to show as subtitles */}
+                           {(() => {
+                              const words = transcript.trim().split(/\s+/);
+                              return words.slice(-15).join(" ");
+                           })()}
+                         </span>
+                      ) : (
+                        <span className="text-white/50 italic animate-pulse">
+                          {t("room.listening", "Listening for speech...")}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

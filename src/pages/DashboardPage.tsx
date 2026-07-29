@@ -4,6 +4,8 @@ import { Flame, TrendingUp, BookOpen, Play, ArrowRight, FileText } from "lucide-
 import { Card, Button } from "../components/ui";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import { useQuery } from "@tanstack/react-query";
+import api from "../lib/api";
 
 const pageTransition = {
   initial: { opacity: 0, scale: 0.98 },
@@ -22,6 +24,14 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const lang = i18n.language;
+
+  const { data: stats } = useQuery({
+    queryKey: ["dashboard-stats"],
+    queryFn: async () => {
+      const res = await api.get("/api/gamification/stats");
+      return res.data.data;
+    },
+  });
 
   const greeting = (() => {
     const hour = new Date().getHours();
@@ -64,7 +74,9 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <p className="label-caps text-neutral/50 dark:text-white/40">Streak</p>
-                  <p className="mono-display text-2xl text-neutral dark:text-white">0</p>
+                  <p className="mono-display text-2xl text-neutral dark:text-white">
+                    {stats?.currentStreak ?? 0}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -80,7 +92,9 @@ export default function DashboardPage() {
                   <p className="label-caps text-neutral/50 dark:text-white/40">
                     {lang === "id" ? "Skor" : "Avg Score"}
                   </p>
-                  <p className="mono-display text-2xl text-neutral dark:text-white">--</p>
+                  <p className="mono-display text-2xl text-neutral dark:text-white">
+                    {stats?.avgScore ?? "--"}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -96,7 +110,9 @@ export default function DashboardPage() {
                   <p className="label-caps text-neutral/50 dark:text-white/40">
                     {lang === "id" ? "Sesi" : "Sessions"}
                   </p>
-                  <p className="mono-display text-2xl text-neutral dark:text-white">0</p>
+                  <p className="mono-display text-2xl text-neutral dark:text-white">
+                    {stats?.totalSessions ?? 0}
+                  </p>
                 </div>
               </div>
             </Card>

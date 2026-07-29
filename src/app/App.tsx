@@ -7,6 +7,7 @@ import { AuthProvider } from "./AuthProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { SplashScreen } from "../components/loading/SplashScreen";
 import { ChatWidget } from "../components/chatbot/ChatWidget";
+import { GlobalDecorations } from "../components/layout/GlobalDecorations";
 import "../lib/i18n";
 
 // Lazy-loaded pages
@@ -22,6 +23,7 @@ const LearningModulesPage = React.lazy(() => import("../pages/LearningModulesPag
 const ScriptTemplatesPage = React.lazy(() => import("../pages/ScriptTemplatesPage"));
 const ProfilePage = React.lazy(() => import("../pages/ProfilePage"));
 const OnboardingPage = React.lazy(() => import("../pages/OnboardingPage"));
+const ScriptWriterPage = React.lazy(() => import("../pages/ScriptWriterPage"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,7 +37,7 @@ const queryClient = new QueryClient({
 
 // Simple page loading fallback (blocky skeleton)
 const PageLoader = () => (
-  <div className="min-h-[100dvh] flex items-center justify-center bg-surface dark:bg-surface-dark">
+  <div className="min-h-[100dvh] flex items-center justify-center bg-transparent">
     <div className="flex gap-2">
       <div className="w-3 h-3 bg-neutral dark:bg-white animate-blink-block-1" />
       <div className="w-3 h-3 bg-neutral dark:bg-white animate-blink-block-2" />
@@ -58,28 +60,34 @@ function App() {
           {!splashDone && <SplashScreen onComplete={handleSplashComplete} />}
 
           <AuthProvider>
-            <ChatWidget />
-            <AnimatePresence mode="wait">
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  {/* Public Routes */}
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
-                  
-                  {/* Protected Routes */}
-                  <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-                  <Route path="/practice/setup" element={<ProtectedRoute><PracticeSetupPage /></ProtectedRoute>} />
-                  <Route path="/practice/room" element={<ProtectedRoute><PracticeRoomPage /></ProtectedRoute>} />
-                  <Route path="/scorecard/:id" element={<ProtectedRoute><ScorecardPage /></ProtectedRoute>} />
-                  <Route path="/progress" element={<ProtectedRoute><ProgressAnalyticsPage /></ProtectedRoute>} />
-                  <Route path="/learning" element={<ProtectedRoute><LearningModulesPage /></ProtectedRoute>} />
-                  <Route path="/templates" element={<ProtectedRoute><ScriptTemplatesPage /></ProtectedRoute>} />
-                  <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-                  <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
-                </Routes>
-              </Suspense>
-            </AnimatePresence>
+            <div className="min-h-[100dvh] bg-surface dark:bg-surface-dark relative flex flex-col w-full">
+              <GlobalDecorations />
+              <div className="relative z-10 flex-grow w-full flex flex-col">
+                <ChatWidget />
+                <AnimatePresence mode="wait">
+                  <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                      {/* Public Routes */}
+                      <Route path="/" element={<LandingPage />} />
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route path="/register" element={<RegisterPage />} />
+
+                      {/* Protected Routes */}
+                      <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+                      <Route path="/practice/setup" element={<ProtectedRoute><PracticeSetupPage /></ProtectedRoute>} />
+                      <Route path="/practice/room" element={<ProtectedRoute><PracticeRoomPage /></ProtectedRoute>} />
+                      <Route path="/scorecard/:id" element={<ProtectedRoute><ScorecardPage /></ProtectedRoute>} />
+                      <Route path="/progress" element={<ProtectedRoute><ProgressAnalyticsPage /></ProtectedRoute>} />
+                      <Route path="/learning" element={<ProtectedRoute><LearningModulesPage /></ProtectedRoute>} />
+                      <Route path="/templates" element={<ProtectedRoute><ScriptTemplatesPage /></ProtectedRoute>} />
+                      <Route path="/script-writer" element={<ProtectedRoute><ScriptWriterPage /></ProtectedRoute>} />
+                      <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+                      <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
+                    </Routes>
+                  </Suspense>
+                </AnimatePresence>
+              </div>
+            </div>
           </AuthProvider>
         </BrowserRouter>
       </ThemeProvider>

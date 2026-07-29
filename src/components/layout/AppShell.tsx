@@ -26,6 +26,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
     { label: t("nav.progress"), path: "/progress", icon: <LineChart size={20} /> },
     { label: t("nav.learning"), path: "/learning", icon: <BookOpen size={20} /> },
     { label: t("nav.templates"), path: "/templates", icon: <FileText size={20} /> },
+    { label: "Writer", path: "/script-writer", icon: <FileText size={20} /> },
     { label: t("nav.profile"), path: "/profile", icon: <User size={20} /> },
   ];
 
@@ -34,7 +35,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   }
 
   return (
-    <div className="min-h-[100dvh] bg-surface dark:bg-surface-dark pb-16 md:pb-0 flex flex-col">
+    <div className="min-h-[100dvh] bg-transparent pb-16 md:pb-0 flex flex-col">
       {/* Desktop Header */}
       <header className="sticky top-0 z-sticky-nav bg-white/95 dark:bg-surface-dark/95 backdrop-blur-sm border-b-3 border-neutral shadow-sm">
         <div className="max-w-content mx-auto px-app-gap flex items-center justify-between h-16">

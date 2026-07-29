@@ -21,6 +21,10 @@
     "wpm": {
       "title": "Pengukur Kecepatan Bicara",
       "description": "Memantau kata per menit dengan rata-rata berjalan. Tetap di rentang ideal 100-160 WPM untuk penyampaian yang jelas."
+    },
+    "scriptTemplate": {
+      "title": "Pembuat Naskah AI",
+      "description": "Cari ide, buat, dan sempurnakan naskah pidato Anda secara interaktif bersama konsultan AI kami. Template yang sudah tersedia juga dapat disesuaikan dengan mudah."
     }
   },
   "social": {

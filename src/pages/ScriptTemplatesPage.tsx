@@ -121,6 +121,10 @@ export default function ScriptTemplatesPage() {
     navigate("/practice/setup", { state: { scriptId } });
   };
 
+  const handleEditScript = (script: ScriptTemplate) => {
+    navigate("/script-writer", { state: { title: script.title, content: script.content } });
+  };
+
   return (
     <motion.div {...pageTransition}>
       <main className="max-w-content mx-auto px-app-gap pt-8 pb-20 md:pb-8">
@@ -269,6 +273,16 @@ export default function ScriptTemplatesPage() {
                                       ? "Pakai untuk Latihan"
                                       : "Use for Practice"}
                                   </Button>
+                                  <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleEditScript(script);
+                                    }}
+                                  >
+                                    {lang === "id" ? "Edit Naskah" : "Edit Script"}
+                                  </Button>
                                 </div>
                               </div>
                             </motion.div>
@@ -368,6 +382,16 @@ export default function ScriptTemplatesPage() {
                                     {lang === "id"
                                       ? "Pakai untuk Latihan"
                                       : "Use for Practice"}
+                                  </Button>
+                                  <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleEditScript(script);
+                                    }}
+                                  >
+                                    {lang === "id" ? "Edit Naskah" : "Edit Script"}
                                   </Button>
                                 </div>
                               </div>

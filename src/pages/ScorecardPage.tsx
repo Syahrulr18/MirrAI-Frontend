@@ -25,10 +25,14 @@ export default function ScorecardPage() {
 
   const {
     mode,
-    targetDurationMinutes,
+    targetDurationSeconds,
+    scriptTitle,
+    scriptContent,
+    scriptAccuracy,
     elapsedSeconds,
     eyeContactGoodSec,
     eyeContactBadSec,
+    eyeContactFlags,
     postureFlags,
     fillerWordCount,
     fillerWordTimestamps,
@@ -40,6 +44,8 @@ export default function ScorecardPage() {
 
   const [savedSessionId, setSavedSessionId] = useState<string | null>(null);
 
+  const isCompleted = elapsedSeconds >= targetDurationSeconds;
+
   // Calculate live scores for current completed session
   const calculated = calculateScorecard({
     durationActualSeconds: elapsedSeconds,
@@ -48,6 +54,7 @@ export default function ScorecardPage() {
     fillerWordCount,
     avgWpm,
     postureFlagsCount: postureFlags.length,
+    scriptAccuracy: scriptAccuracy ?? undefined,
   });
 
   // Save session mutation
@@ -55,7 +62,7 @@ export default function ScorecardPage() {
     mutationFn: async () => {
       const payload = {
         mode,
-        durationTarget: targetDurationMinutes * 60,
+        durationTarget: targetDurationSeconds,
         durationActual: Math.max(elapsedSeconds, 1),
         eyeContactGoodSec,
         eyeContactBadSec,
@@ -64,6 +71,7 @@ export default function ScorecardPage() {
         avgWpm,
         wpmSamples,
         postureFlags,
+        scriptAccuracy: scriptAccuracy ?? undefined,
       };
 
       const res = await api.post("/api/sessions", payload);
@@ -77,10 +85,9 @@ export default function ScorecardPage() {
     },
   });
 
-  // Save to backend once when navigating from a new session
+  // Save to backend once when navigating from a new session, ONLY if completed
   useEffect(() => {
-    // If the user ended early, elapsedSeconds might be 0, but we still want to save it as 1 to record the session.
-    const isReadyToSave = isNewSession && !savedSessionId && !saveSessionMutation.isPending;
+    const isReadyToSave = isNewSession && !savedSessionId && !saveSessionMutation.isPending && isCompleted;
     if (isReadyToSave) {
       saveSessionMutation.mutate(undefined, {
         onError: (err) => {
@@ -88,18 +95,35 @@ export default function ScorecardPage() {
         }
       });
     }
-  }, [isNewSession, savedSessionId, saveSessionMutation]);
+  }, [isNewSession, savedSessionId, saveSessionMutation, isCompleted]);
 
   // Fetch historical session if viewing by ID
   const { data: dbSession } = useQuery({
     queryKey: ["session", id],
     queryFn: async () => {
-      if (isNewSession) return null;
+      if (!id || id === "new") return null;
       const res = await api.get(`/api/sessions/${id}`);
       return res.data.data;
     },
     enabled: !isNewSession && !!id,
   });
+
+  const handleReturnDashboard = () => {
+    resetSession();
+    navigate("/dashboard");
+  };
+
+  if (!isNewSession && !dbSession) {
+    return (
+      <div className="min-h-[100dvh] flex items-center justify-center">
+        <div className="flex gap-2">
+          <div className="w-3 h-3 bg-neutral dark:bg-white animate-blink-block-1" />
+          <div className="w-3 h-3 bg-neutral dark:bg-white animate-blink-block-2" />
+          <div className="w-3 h-3 bg-neutral dark:bg-white animate-blink-block-3" />
+        </div>
+      </div>
+    );
+  }
 
   // Displayed scores (from DB if historical, or calculated if new)
   const totalScore = dbSession?.scorecard?.totalScore ?? calculated.totalScore;
@@ -112,19 +136,33 @@ export default function ScorecardPage() {
   };
 
   return (
-    <motion.div {...pageTransition} className="min-h-[100dvh] bg-surface dark:bg-surface-dark pb-16">
-      <header className="border-b-3 border-neutral bg-white dark:bg-surface-dark">
-        <div className="max-w-content mx-auto px-app-gap flex items-center justify-between h-16">
-          <h1 className="text-lg font-bold text-neutral dark:text-white">
-            {t("title", "Session Scorecard")}
-          </h1>
-          <Button variant="primary" size="sm" onClick={handlePracticeAgain} leftIcon={<RotateCcw size={16} />}>
-            {t("practiceAgain", "Practice Again")}
-          </Button>
-        </div>
+    <motion.div {...pageTransition}>
+      {/* Navbar Minimal */}
+      <header className="border-b-4 border-neutral bg-surface dark:bg-surface-dark px-app-gap py-4 sticky top-0 z-50 flex items-center">
+        <button
+          onClick={handleReturnDashboard}
+          className="p-2 -ml-2 rounded-full hover:bg-neutral/10 dark:hover:bg-white/10 transition-colors text-neutral dark:text-white"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <h1 className="text-xl font-bold ml-2">Practice Results</h1>
       </header>
 
       <main className="max-w-3xl mx-auto px-app-gap py-8 space-y-8">
+        
+        {/* Early End Warning Banner */}
+        {isNewSession && !isCompleted && (
+          <div className="bg-warning/20 border-2 border-warning text-neutral dark:text-white rounded-neu p-4 flex items-start gap-3 shadow-neu-sm">
+            <MessageCircleWarning className="text-warning flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-bold text-sm">Session Ended Early</h3>
+              <p className="text-xs opacity-80 mt-1">
+                You didn't reach your target duration ({Math.floor(targetDurationSeconds / 60)} min). This session will not be saved to your progress and won't count towards your streak.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Total Score Display */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -223,6 +261,18 @@ export default function ScorecardPage() {
             </span>
           </Card>
         </div>
+        
+        {scriptAccuracy !== null && (
+          <Card className="border-3 border-neutral bg-tertiary/10 p-4 flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-neutral dark:text-white text-sm">Script Accuracy</h3>
+              <p className="text-xs text-neutral/60 dark:text-white/50">Percentage of exact matched words from script</p>
+            </div>
+            <div className="mono-display text-2xl font-black text-tertiary">
+              {scriptAccuracy}%
+            </div>
+          </Card>
+        )}
 
         {/* Video Replay */}
         <Card className="border-3 border-neutral">
@@ -241,7 +291,7 @@ export default function ScorecardPage() {
               </div>
 
               {/* Timestamp Markers */}
-              {(fillerWordTimestamps.length > 0 || postureFlags.length > 0) && (
+              {(fillerWordTimestamps.length > 0 || postureFlags.length > 0 || eyeContactFlags.length > 0) && (
                 <div className="space-y-2">
                   <p className="text-xs font-bold text-neutral/60 dark:text-white/50 uppercase">
                     Detected Flag Markers
@@ -255,6 +305,18 @@ export default function ScorecardPage() {
                         <Shield size={12} className="text-warning" />
                         <span>
                           {flag.type} at {Math.floor(flag.atSecond / 60)}:
+                          {(flag.atSecond % 60).toString().padStart(2, "0")}
+                        </span>
+                      </div>
+                    ))}
+                    {eyeContactFlags.map((flag, idx) => (
+                      <div
+                        key={`eye-${idx}`}
+                        className="px-2.5 py-1 rounded-neu border-2 border-neutral bg-tertiary/20 text-xs font-bold text-tertiary flex items-center gap-1"
+                      >
+                        <Eye size={12} />
+                        <span>
+                          Looked Away at {Math.floor(flag.atSecond / 60)}:
                           {(flag.atSecond % 60).toString().padStart(2, "0")}
                         </span>
                       </div>

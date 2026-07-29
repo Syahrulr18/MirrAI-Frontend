@@ -45,6 +45,9 @@ export function useSpeechAnalyzer() {
       const newText = currentFullTranscript.substring(lastProcessedIndexRef.current);
 
       if (newText.trim().length > 0) {
+        lastSpeechTimeRef.current = Date.now();
+        pauseReportedRef.current = false; // Reset the pause flag so they can trigger another one later
+
         const foundFillers = detectFillerWords(newText, lang);
         if (foundFillers.length > 0) {
           foundFillers.forEach((filler) => {
@@ -111,6 +114,8 @@ export function useSpeechAnalyzer() {
       try {
         lastProcessedIndexRef.current = 0;
         spokenWordsTimeRef.current = [];
+        lastSpeechTimeRef.current = Date.now();
+        pauseReportedRef.current = false;
         setTranscript("");
         recognitionRef.current.start();
         setIsListening(true);
@@ -139,6 +144,27 @@ export function useSpeechAnalyzer() {
       stopListening();
     }
   }, [isRecording, startListening, stopListening]);
+
+  // Pause Detection
+  const lastSpeechTimeRef = useRef<number>(Date.now());
+  const pauseReportedRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (!isRecording) return;
+
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const timeSinceLastSpeech = now - lastSpeechTimeRef.current;
+
+      // If no speech for 7 seconds, count as a "Long Pause" filler
+      if (timeSinceLastSpeech >= 7000 && !pauseReportedRef.current) {
+        useSessionStore.getState().addFillerWord("[Long Pause]");
+        pauseReportedRef.current = true; // prevent spamming until they speak again
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isRecording]);
 
   return {
     isSupported,

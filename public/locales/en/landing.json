@@ -21,6 +21,10 @@
     "wpm": {
       "title": "Voice Speedometer",
       "description": "Monitors your words per minute with a rolling average. Stay in the ideal 100-160 WPM range for clear delivery."
+    },
+    "scriptTemplate": {
+      "title": "AI Script Builder",
+      "description": "Brainstorm, create, and refine your speech scripts interactively with our AI consultant. Ready-to-use templates can be easily tailored to your needs."
     }
   },
   "social": {
