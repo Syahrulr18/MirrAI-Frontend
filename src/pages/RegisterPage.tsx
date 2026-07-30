@@ -31,7 +31,7 @@ export default function RegisterPage() {
 
     // Call our backend API to create the user directly (bypassing Supabase email confirmation)
     try {
-      const response = await api.post("/auth/signup", { email, password });
+      const response = await api.post("/api/auth/signup", { email, password });
       
       // Automatically sign in the user via Supabase after creation
       const { error: signInError } = await supabase.auth.signInWithPassword({
