@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Hand } from "lucide-react";
 import { Button, Input, Card } from "../components/ui";
 import { useAuthStore } from "../store/authStore";
 import api from "../lib/api";
@@ -81,8 +82,8 @@ export default function OnboardingPage() {
             <h1 className="text-3xl font-bold text-neutral dark:text-white mb-4">
               MirrAI
             </h1>
-            <div className="w-16 h-16 rounded-full bg-primary/20 border-3 border-neutral mx-auto mb-4 flex items-center justify-center">
-              <span className="text-2xl">👋</span>
+            <div className="w-16 h-16 rounded-full bg-primary/20 border-3 border-neutral mx-auto mb-4 flex items-center justify-center text-primary">
+              <Hand size={32} strokeWidth={2.5} className="animate-bounce" />
             </div>
             <h2 className="text-xl font-bold text-neutral dark:text-white mb-1">
               Welcome! Let's set up your profile
