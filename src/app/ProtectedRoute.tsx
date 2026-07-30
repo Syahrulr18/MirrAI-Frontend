@@ -25,10 +25,7 @@ export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ childr
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // If user needs onboarding (e.g. new Google user without display name)
-  if (needsOnboarding && location.pathname !== "/onboarding") {
-    return <Navigate to="/onboarding" replace />;
-  }
+  // (Onboarding redirection removed per user request)
 
   return <AppShell>{children}</AppShell>;
 };

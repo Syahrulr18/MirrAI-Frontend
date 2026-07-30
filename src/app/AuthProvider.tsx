@@ -64,13 +64,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         displayName: userFromBackend.displayName,
       });
 
-      // If OAuth user has no displayName in DB, show onboarding form
-      const hasNoName = !userFromBackend.displayName || userFromBackend.displayName.trim() === "";
-      if (isOAuthUser && hasNoName) {
-        setNeedsOnboarding(true);
-      } else {
-        setNeedsOnboarding(false);
-      }
+      // (Onboarding redirection removed per user request)
+      setNeedsOnboarding(false);
     } catch (error) {
       console.error("Failed to sync user to backend:", error);
       // Fallback — store basic info so user can still use the app
@@ -80,12 +75,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         displayName: displayName,
       });
 
-      // If OAuth user and no name, show onboarding
-      if (isOAuthUser && !displayName) {
-        setNeedsOnboarding(true);
-      } else {
-        setNeedsOnboarding(false);
-      }
+      // (Onboarding redirection removed per user request)
+      setNeedsOnboarding(false);
     } finally {
       setLoading(false);
     }

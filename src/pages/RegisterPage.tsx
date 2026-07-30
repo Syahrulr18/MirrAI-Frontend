@@ -45,9 +45,8 @@ export default function RegisterPage() {
       if (signInError) {
         setError(signInError.message);
       } else {
-        // Since it's a new manual signup, they don't have a display name.
-        // The ProtectedRoute will automatically redirect them to /onboarding.
-        navigate("/onboarding", { replace: true });
+        // Redirect directly to dashboard per user request
+        navigate("/dashboard", { replace: true });
       }
     } catch (err: any) {
       setLoading(false);
