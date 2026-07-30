@@ -19,6 +19,7 @@ export default function RegisterPage() {
   const { t } = useTranslation("common");
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,7 @@ export default function RegisterPage() {
 
     // Call our backend API to create the user directly (bypassing Supabase email confirmation)
     try {
-      const response = await api.post("/api/auth/signup", { email, password });
+      const response = await api.post("/api/auth/signup", { email, password, displayName: name });
       
       // Automatically sign in the user via Supabase after creation
       const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -103,6 +104,16 @@ export default function RegisterPage() {
           )}
 
           <form className="space-y-4" onSubmit={handleRegister}>
+            <Input
+              label="Display Name"
+              type="text"
+              placeholder="Your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              disabled={loading}
+              minLength={2}
+            />
             <Input
               label="Email"
               type="email"
