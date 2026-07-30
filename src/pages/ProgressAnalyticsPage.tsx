@@ -59,7 +59,8 @@ export default function ProgressAnalyticsPage() {
   });
 
   const { data: consistencyResponse, isLoading: isLoadingConsistency } = useQuery<{
-    data: string[];
+    data: ConsistencyData[];
+    meta?: { year: number; month: number; daysInMonth: number };
   }>({
     queryKey: ["analytics", "consistency"],
     queryFn: async () => {
@@ -68,27 +69,19 @@ export default function ProgressAnalyticsPage() {
     }
   });
 
+  // Always fallback to generating current month days locally if API data is empty
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonthIdx = now.getMonth();
   const totalDaysInMonth = new Date(currentYear, currentMonthIdx + 1, 0).getDate();
 
-  // Create an array for all days of the current month
-  const consistency = Array.from({ length: totalDaysInMonth }, (_, i) => {
-    const dayNum = i + 1;
-    const dateStr = `${currentYear}-${String(currentMonthIdx + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
-    let practiced = false;
-
-    // Check if any session timestamp falls on this day in the local timezone
-    if (consistencyResponse?.data) {
-      practiced = consistencyResponse.data.some(isoString => {
-        const d = new Date(isoString);
-        return d.getFullYear() === currentYear && d.getMonth() === currentMonthIdx && d.getDate() === dayNum;
+  const consistency = (consistencyResponse?.data && consistencyResponse.data.length > 0)
+    ? consistencyResponse.data
+    : Array.from({ length: totalDaysInMonth }, (_, i) => {
+        const d = i + 1;
+        const dateStr = `${currentYear}-${String(currentMonthIdx + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        return { date: dateStr, practiced: false };
       });
-    }
-
-    return { date: dateStr, practiced };
-  });
 
   const chartData = trends.map((item, index) => ({
     ...item,
