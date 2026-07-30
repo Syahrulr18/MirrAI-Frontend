@@ -25,12 +25,12 @@ const ProfilePage = React.lazy(() => import("../pages/ProfilePage"));
 const OnboardingPage = React.lazy(() => import("../pages/OnboardingPage"));
 const ScriptWriterPage = React.lazy(() => import("../pages/ScriptWriterPage"));
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 min
+      staleTime: 1000 * 30, // 30 seconds — data refreshes more frequently
       retry: 2,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true, // Refresh data when user returns to tab
     },
   },
 });

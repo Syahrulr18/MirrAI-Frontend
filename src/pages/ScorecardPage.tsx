@@ -8,6 +8,7 @@ import { Button, Card } from "../components/ui";
 import { useSessionStore } from "../store/sessionStore";
 import { calculateScorecard } from "../lib/scoring";
 import api from "../lib/api";
+import { queryClient } from "../app/App";
 
 const pageTransition = {
   initial: { opacity: 0, scale: 0.98 },
@@ -79,6 +80,9 @@ export default function ScorecardPage() {
     },
     onSuccess: (data) => {
       setSavedSessionId(data.id);
+      // Invalidate all dashboard/analytics caches so pages show fresh data
+      queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["analytics"] });
     },
     onError: (err) => {
       console.warn("[Scorecard] Failed to save session to backend:", err);
