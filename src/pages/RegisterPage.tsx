@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button, Input, Card } from "../components/ui";
 import { supabase } from "../lib/supabase";
+import api from "../lib/api";
 import { Footer } from "../components/layout/Footer";
 
 const pageTransition = {
@@ -30,20 +31,8 @@ export default function RegisterPage() {
 
     // Call our backend API to create the user directly (bypassing Supabase email confirmation)
     try {
-      const response = await fetch("http://localhost:4000/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to create account");
-      }
-
+      const response = await api.post("/auth/signup", { email, password });
+      
       // Automatically sign in the user via Supabase after creation
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
