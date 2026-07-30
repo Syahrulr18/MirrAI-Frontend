@@ -13,6 +13,11 @@ import {
   ArrowLeft,
   Clock,
   X,
+  CheckCircle2,
+  Mic,
+  Eye,
+  MessageSquare,
+  MonitorPlay,
 } from "lucide-react";
 import { Card, Button, Chip } from "../components/ui";
 import api from "../lib/api";
@@ -67,6 +72,36 @@ const topicConfig: Record<
     color: "text-warning",
     bgColor: "bg-warning/10",
   },
+  closing: {
+    icon: CheckCircle2,
+    color: "text-success",
+    bgColor: "bg-success/10",
+  },
+  vocal_variety: {
+    icon: Mic,
+    color: "text-secondary",
+    bgColor: "bg-secondary/10",
+  },
+  eye_contact: {
+    icon: Eye,
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  qna: {
+    icon: MessageSquare,
+    color: "text-warning",
+    bgColor: "bg-warning/10",
+  },
+  storytelling: {
+    icon: BookOpen,
+    color: "text-tertiary",
+    bgColor: "bg-tertiary/10",
+  },
+  slide_design: {
+    icon: MonitorPlay,
+    color: "text-success",
+    bgColor: "bg-success/10",
+  },
 };
 
 const topicLabels: Record<string, { en: string; id: string }> = {
@@ -76,6 +111,12 @@ const topicLabels: Record<string, { en: string; id: string }> = {
   body_language: { en: "Body Language", id: "Bahasa Tubuh" },
   stage_fright: { en: "Stage Fright", id: "Demam Panggung" },
   filler_words: { en: "Filler Words", id: "Kata Pengisi" },
+  closing: { en: "Closing", id: "Penutup" },
+  vocal_variety: { en: "Vocal Variety", id: "Variasi Vokal" },
+  eye_contact: { en: "Eye Contact", id: "Kontak Mata" },
+  qna: { en: "Q&A Sessions", id: "Sesi Tanya Jawab" },
+  storytelling: { en: "Storytelling", id: "Bercerita" },
+  slide_design: { en: "Slide Design", id: "Desain Slide" },
 };
 
 // Simple markdown renderer for article body
